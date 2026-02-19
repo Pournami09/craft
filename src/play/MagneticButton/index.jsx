@@ -1,9 +1,13 @@
+'use client'
+
 /**
  * MagneticButton
  *
  * The button is attracted toward the cursor when hovered within
  * a defined proximity zone. On leave, it springs back to origin.
  * Uses cubic-bezier easing to mimic elastic rebound.
+ *
+ * 'use client' — uses useRef, useState, and mouse event handlers.
  */
 
 import { useRef, useState } from 'react'

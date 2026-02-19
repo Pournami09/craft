@@ -1,9 +1,13 @@
+'use client'
+
 /**
  * PlayCard
  *
  * Wraps a play component in a contained display card.
  * The component renders live and interactive inside the off-white container.
  * Clicking anywhere on the card fires `onClick` to open the modal.
+ *
+ * 'use client' — event handlers (onClick, onMouseEnter/Leave).
  *
  * Props:
  *   item     – registry item object
