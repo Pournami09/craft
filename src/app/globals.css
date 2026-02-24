@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #FAFAF9;
+  background-color: #F0EFEB;
   color: #111;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -20,4 +20,31 @@ a {
 
 button {
   font-family: inherit;
+}
+
+/* ── Nav links ── */
+.nav-link {
+  transition: color 150ms ease;
+}
+
+/* ── Play filter pills ── */
+.play-tag-btn {
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+/* ── Play cards ── */
+.play-card-inner {
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .play-card-inner:hover {
+    transform: scale(1.01);
+  }
+}
+
+/* ── Reduced motion: disable all UI animations ── */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link        { transition: none; }
+  .play-tag-btn    { transition: none; }
+  .play-card-inner { transition: none; }
 }

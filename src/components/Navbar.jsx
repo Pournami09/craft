@@ -20,6 +20,10 @@ const NAV_LINKS = [
   { href: '/writings', label: 'Writings' },
 ]
 
+const canHover = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
 export default function Navbar() {
   const pathname = usePathname()
 
@@ -36,7 +40,7 @@ export default function Navbar() {
         justifyContent:       'space-between',
         padding:              '0 40px',
         borderBottom:         '1px solid #E8E8E4',
-        backgroundColor:      'rgba(250, 250, 249, 0.88)',
+        backgroundColor:      'rgba(240, 239, 235, 0.88)',
         backdropFilter:       'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         zIndex:               50,
@@ -46,7 +50,7 @@ export default function Navbar() {
       <Link
         href="/"
         style={{
-          fontSize:      '13px',
+          fontSize:      '14px',
           fontWeight:    500,
           color:         '#111',
           letterSpacing: '-0.02em',
@@ -63,14 +67,18 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
+              className="nav-link"
               style={{
-                fontSize:      '13px',
-                color:         isActive ? '#111' : '#999',
+                fontSize:      '14px',
+                color:         isActive ? '#111' : '#767676',
                 letterSpacing: '-0.005em',
-                transition:    'color 0.15s ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.color = '#111'}
-              onMouseLeave={e => e.currentTarget.style.color = isActive ? '#111' : '#999'}
+              onMouseEnter={e => {
+                if (canHover()) e.currentTarget.style.color = '#111'
+              }}
+              onMouseLeave={e => {
+                if (canHover()) e.currentTarget.style.color = isActive ? '#111' : '#767676'
+              }}
             >
               {label}
             </Link>

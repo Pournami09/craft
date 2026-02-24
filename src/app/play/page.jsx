@@ -12,7 +12,8 @@
  *   Done. Nothing to change here.
  */
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { playItems } from '@/play'
 import PlayCard      from '@/components/play/PlayCard'
 import PlayModal     from '@/components/play/PlayModal'
@@ -34,6 +35,7 @@ const MASONRY_CSS = `
 export default function Play() {
   const [activeTag,  setActiveTag]  = useState('All')
   const [activeItem, setActiveItem] = useState(null)
+  const originRectRef = useRef(null)
 
   const allTags = useMemo(() => {
     const seen = new Set()
@@ -52,16 +54,16 @@ export default function Play() {
     <>
       <style>{MASONRY_CSS}</style>
 
-      <main style={{ paddingTop: '48px', minHeight: '100vh' }}>
+      <main style={{ minHeight: '100vh' }}>
 
         {/* ── Page header ── */}
-        <header style={{ padding: '56px 40px 0' }}>
+        <header style={{ padding: '80px 40px 0' }}>
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '20px' }}>
-            <h1 style={{ fontSize: '13px', fontWeight: 400, color: '#111', margin: 0, letterSpacing: '-0.01em' }}>
+            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#111', margin: 0, letterSpacing: '-0.02em' }}>
               Play
             </h1>
-            <span style={{ fontSize: '12px', color: '#BBB' }}>
+            <span style={{ fontSize: '14px', color: '#767676' }}>
               {visibleItems.length} exploration{visibleItems.length !== 1 ? 's' : ''}
             </span>
           </div>
@@ -74,17 +76,27 @@ export default function Play() {
                 <button
                   key={tag}
                   onClick={() => setActiveTag(tag)}
+                  className="play-tag-btn"
                   style={{
-                    fontSize:        '12px',
+                    fontSize:        '14px',
                     padding:         '5px 13px',
                     borderRadius:    '999px',
                     border:          '1px solid',
                     borderColor:     isActive ? '#111' : '#DDD',
                     backgroundColor: isActive ? '#111' : 'transparent',
-                    color:           isActive ? '#fff' : '#777',
+                    color:           isActive ? '#fff' : '#696969',
                     cursor:          'pointer',
                     letterSpacing:   '-0.005em',
-                    transition:      'all 0.15s ease',
+                  }}
+                  onMouseEnter={e => {
+                    if (isActive) return
+                    e.currentTarget.style.borderColor = '#111'
+                    e.currentTarget.style.color = '#111'
+                  }}
+                  onMouseLeave={e => {
+                    if (isActive) return
+                    e.currentTarget.style.borderColor = '#DDD'
+                    e.currentTarget.style.color = '#696969'
                   }}
                 >
                   {tag}
@@ -100,18 +112,25 @@ export default function Play() {
             <PlayCard
               key={item.id}
               item={item}
-              onClick={() => setActiveItem(item)}
+              onClick={(e) => {
+                originRectRef.current = e.currentTarget.getBoundingClientRect()
+                setActiveItem(item)
+              }}
             />
           ))}
         </div>
 
         {/* ── Modal ── */}
-        {activeItem && (
-          <PlayModal
-            item={activeItem}
-            onClose={() => setActiveItem(null)}
-          />
-        )}
+        <AnimatePresence>
+          {activeItem && (
+            <PlayModal
+              key={activeItem.id}
+              item={activeItem}
+              originRect={originRectRef.current}
+              onClose={() => setActiveItem(null)}
+            />
+          )}
+        </AnimatePresence>
       </main>
     </>
   )

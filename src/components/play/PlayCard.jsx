@@ -21,10 +21,14 @@ const SIZE_MAP = {
 }
 
 // Single token — change to retheme all cards
-const CARD_BG = '#F0EFEB'
+const CARD_BG = '#FFFFFF'
+
+const canHover = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
 export default function PlayCard({ item, onClick }) {
-  const { component: Component, title, year, tags, size = 'md' } = item
+  const { component: Component, title, year, tags, size = 'md', padding: componentPadding = 0 } = item
 
   return (
     <div
@@ -37,21 +41,25 @@ export default function PlayCard({ item, onClick }) {
     >
       {/* ── Component container ── */}
       <div
+        className="play-card-inner"
         style={{
           backgroundColor: CARD_BG,
           borderRadius:    '10px',
-          minHeight:       SIZE_MAP[size],
+          minHeight:       '-webkit-fill-available',
           display:         'flex',
           alignItems:      'center',
           justifyContent:  'center',
           overflow:        'hidden',
           position:        'relative',
           width:           '100%',
-          transition:      'background-color 0.15s ease',
+          padding:         componentPadding,
         }}
-        // Subtle hover darkening on the container — JS because inline :hover isn't supported
-        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E8E7E2'}
-        onMouseLeave={e => e.currentTarget.style.backgroundColor = CARD_BG}
+        onMouseEnter={e => {
+          if (canHover()) e.currentTarget.style.backgroundColor = '#E9E8E5'
+        }}
+        onMouseLeave={e => {
+          if (canHover()) e.currentTarget.style.backgroundColor = CARD_BG
+        }}
       >
         <Component />
       </div>
@@ -66,10 +74,10 @@ export default function PlayCard({ item, onClick }) {
           padding:        '0 2px',
         }}
       >
-        <span style={{ fontSize: '13px', color: '#111', letterSpacing: '-0.01em' }}>
+        <span style={{ fontSize: '14px', color: '#111', letterSpacing: '-0.01em' }}>
           {title}
         </span>
-        <span style={{ fontSize: '12px', color: '#999' }}>
+        <span style={{ fontSize: '14px', color: '#767676' }}>
           {year}
         </span>
       </div>
@@ -89,9 +97,9 @@ export default function PlayCard({ item, onClick }) {
             <span
               key={tag}
               style={{
-                fontSize:     '11px',
-                color:        '#888',
-                background:   '#E8E8E4',
+                fontSize:     '14px',
+                color:        '#646464',
+                background:   '#FFFFFF',
                 borderRadius: '4px',
                 padding:      '2px 8px',
                 letterSpacing:'0.01em',
